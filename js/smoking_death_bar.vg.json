@@ -3,7 +3,7 @@
     "title": "Trend of Smoking Mortality by Year for a Selected Country",
     "description": "Trend of Smoking Mortality by Year for a Selected Country",
     "data": {
-      "url": "https://raw.githubusercontent.com/ongzn/FIT3179-Week-10-Homework/refs/heads/main/week10git/data/death-rate-smoking%20new.csv",
+      "url": "https://raw.githubusercontent.com/ongzn/FIT3179-Week-10-Homework/refs/heads/main/data/death-rate-smoking%20new.csv",
       "format": {"type": "csv"}
     },
     "width": 600,
