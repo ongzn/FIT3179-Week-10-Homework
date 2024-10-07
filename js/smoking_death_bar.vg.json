@@ -1,0 +1,147 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "title": "Trend of Smoking Mortality by Year for a Selected Country",
+    "description": "Trend of Smoking Mortality by Year for a Selected Country",
+    "data": {
+      "url": "https://raw.githubusercontent.com/ongzn/FIT3179-Week-10-Homework/refs/heads/main/week10git/data/death-rate-smoking%20new.csv",
+      "format": {"type": "csv"}
+    },
+    "width": 600,
+    "height": 400,
+    "layer": [
+      {
+        "selection": {
+          "CountrySelection": {
+            "type": "single",
+            "fields": ["Entity"],
+            "bind": {
+              "input": "select",
+              "options": [
+                null,
+                "Afghanistan", "Albania", "Algeria", "Argentina", "Australia", "Austria",
+                "Bangladesh", "Belgium", "Brazil", "Canada", "China", "Colombia",
+                "Denmark", "Egypt", "France", "Germany", "Greece", "India", "Indonesia",
+                "Ireland", "Italy", "Japan", "Kenya", "Malaysia", "Mexico", "Morocco",
+                "Myanmar", "Nepal", "Netherlands", "New Zealand", "Nigeria", "Norway",
+                "Pakistan", "Peru", "Philippines", "Poland", "Portugal", "Russia",
+                "South Africa", "South Korea", "Spain", "Sri Lanka", "Sweden", "Switzerland",
+                "Thailand", "Turkey", "Ukraine", "United Arab Emirates", "United Kingdom",
+                "United States", "Vietnam", "Zimbabwe"
+              ],
+              "labels": [
+                "All Countries",
+                "Afghanistan", "Albania", "Algeria", "Argentina", "Australia", "Austria",
+                "Bangladesh", "Belgium", "Brazil", "Canada", "China", "Colombia",
+                "Denmark", "Egypt", "France", "Germany", "Greece", "India", "Indonesia",
+                "Ireland", "Italy", "Japan", "Kenya", "Malaysia", "Mexico", "Morocco",
+                "Myanmar", "Nepal", "Netherlands", "New Zealand", "Nigeria", "Norway",
+                "Pakistan", "Peru", "Philippines", "Poland", "Portugal", "Russia",
+                "South Africa", "South Korea", "Spain", "Sri Lanka", "Sweden", "Switzerland",
+                "Thailand", "Turkey", "Ukraine", "United Arab Emirates", "United Kingdom",
+                "United States", "Vietnam", "Zimbabwe"
+              ],
+              "name": "Select a Country: "
+            }
+          }
+        },
+        "transform": [
+          {
+            "filter": {"selection": "CountrySelection"}
+          },
+          {
+            "calculate": "datum['Smoking mortality'] / 1000000",
+            "as": "Smoking Mortality (millions)"
+          },
+          {
+            "aggregate": [
+              {
+                "op": "sum",
+                "field": "Smoking Mortality (millions)",
+                "as": "Total Smoking Mortality"
+              }
+            ],
+            "groupby": ["Year"]
+          },
+          {
+            "window": [
+              {"op": "rank", "as": "rank"}
+            ],
+            "sort": [
+              {"field": "Total Smoking Mortality", "order": "descending"}
+            ]
+          }
+        ],
+        "mark": "bar",
+        "encoding": {
+          "x": {
+            "field": "Year",
+            "type": "ordinal",
+            "title": "Year"
+          },
+          "y": {
+            "field": "Total Smoking Mortality",
+            "type": "quantitative",
+            "title": "Total Smoking Mortality (millions)"
+          },
+          "color": {
+            "value": "steelblue"
+          },
+          "tooltip": [
+            {"field": "Year", "type": "ordinal"},
+            {"field": "Total Smoking Mortality", "type": "quantitative"}
+          ]
+        }
+      },
+  {
+        "transform": [
+          {
+            "filter": {"selection": "CountrySelection"}
+          },
+          {
+            "calculate": "(datum['Smoking mortality'] / 1000000)+1",
+            "as": "Smoking Mortality (millions)"
+          },
+          {
+            "aggregate": [
+              {
+                "op": "sum",
+                "field": "Smoking Mortality (millions)",
+                "as": "Total Smoking Mortality"
+              }
+            ],
+            "groupby": ["Year"]
+          },
+          {
+            "window": [
+              {"op": "rank", "as": "rank"}
+            ],
+            "sort": [
+              {"field": "Total Smoking Mortality", "order": "descending"}
+            ]
+          },
+          {
+            "filter": "datum.rank === 1"
+          }
+        ],
+        "mark": "text",
+        "encoding": {
+          "x": {
+            "field": "Year",
+            "type": "ordinal",
+            "align": "center"
+          },
+          "y": {
+          "field": "Total Smoking Mortality",
+          "type": "quantitative",
+          "stack": "zero"
+        },
+          "text": {
+            "value": "Highest",
+            "type": "nominal"
+          },
+          "dy": {"value": -10},
+          "color": {"value": "red"}
+        }
+      } 
+    ]
+  }
